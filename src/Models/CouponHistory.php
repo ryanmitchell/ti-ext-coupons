@@ -2,6 +2,7 @@
 
 namespace Igniter\Coupons\Models;
 
+use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\Flame\Database\Model;
 use Igniter\System\Models\Concerns\Switchable;
 use Igniter\User\Models\Concerns\HasCustomer;
@@ -12,6 +13,7 @@ use Igniter\User\Models\Concerns\HasCustomer;
 class CouponHistory extends Model
 {
     use HasCustomer;
+    use HasFactory;
     use Switchable;
 
     /**

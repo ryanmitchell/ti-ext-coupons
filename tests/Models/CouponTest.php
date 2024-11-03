@@ -1,5 +1,7 @@
 <?php
 
+namespace Igniter\Cart\Tests\Models;
+
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Coupons\Models\CouponHistory;
 use Igniter\Coupons\Models\Scopes\CouponScope;
