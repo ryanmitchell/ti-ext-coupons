@@ -11,8 +11,14 @@ return new class extends Migration
     {
         Schema::table('igniter_coupons', function(Blueprint $table) {
             $table->timestamp('date_added')->change();
+        });
+
+        Schema::table('igniter_coupons', function(Blueprint $table) {
             $table->renameColumn('date_added', 'created_at');
-            $table->timestamp('updated_at');
+        });
+
+        Schema::table('igniter_coupons', function(Blueprint $table) {
+            $table->timestamp('updated_at')->nullable();
         });
 
         DB::table('igniter_coupons')->update([
@@ -21,8 +27,14 @@ return new class extends Migration
 
         Schema::table('igniter_coupons_history', function(Blueprint $table) {
             $table->timestamp('date_used')->change();
+        });
+
+        Schema::table('igniter_coupons_history', function(Blueprint $table) {
             $table->renameColumn('date_used', 'created_at');
-            $table->timestamp('updated_at');
+        });
+
+        Schema::table('igniter_coupons_history', function(Blueprint $table) {
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
