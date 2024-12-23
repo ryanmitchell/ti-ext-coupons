@@ -5,16 +5,83 @@ namespace Igniter\Coupons\Tests;
 use Igniter\Cart\Models\Order;
 use Igniter\Coupons\Extension;
 use Igniter\Coupons\Models\Actions\RedeemsCoupon;
+use Igniter\Coupons\Models\Coupon;
 use Igniter\Coupons\Models\Coupon as CouponModel;
 use Igniter\Coupons\Models\CouponHistory;
+use Igniter\Coupons\Models\Observers\CouponObserver;
+use Igniter\Coupons\Models\Observers\OrderObserver;
+use Igniter\Coupons\Models\Scopes\CouponScope;
+use Igniter\Local\Facades\Location;
+use Igniter\Local\Models\Location as LocationModel;
 use Igniter\User\Models\Customer;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 
+it('registers model observers correctly', function() {
+    $extension = new class(app()) extends Extension
+    {
+        public function testObservers()
+        {
+            return $this->observers;
+        }
+    };
+
+    expect($extension->testObservers())->toBe([
+        Coupon::class => CouponObserver::class,
+        Order::class => OrderObserver::class,
+    ]);
+});
+
+it('adds model scopes correctly', function() {
+    expect((new Coupon)->getGlobalScopes())->toHaveKey(CouponScope::class);
+});
+
 it('adds RedeemsCoupon trait to order model', function() {
     $order = new Order;
 
-    expect($order->implement)->toContain(RedeemsCoupon::class);
+    expect($order->implement)->toContain(RedeemsCoupon::class)
+        ->and($order->relation['hasMany']['coupon_history'])->toBe([CouponHistory::class]);
+});
+
+it('applies coupon condition on add cart item', function() {
+    CouponModel::factory()->create([
+        'code' => 'test-coupon',
+        'name' => 'coupon',
+        'auto_apply' => 1,
+        'validity' => 'forever',
+    ]);
+    Location::shouldReceive('getId')->andReturn(1);
+    Location::shouldReceive('orderDateTime')->andReturn(now());
+    Location::shouldReceive('orderType')->andReturn(LocationModel::COLLECTION);
+
+    event('cart.added');
+
+    expect(resolve('cart')->conditions())->toHaveCount(1)
+        ->and(resolve('cart')->conditions()->first()->getMetaData('code'))->toBe('test-coupon');
+});
+
+it('extends paypal express fields', function() {
+    $fields = [
+        'purchase_units' => [
+            0 => [
+                'amount' => [
+                    'currency_code' => 'USD',
+                    'value' => '100.00',
+                ],
+            ],
+        ],
+    ];
+    $order = Order::factory()->create();
+    $order->totals()->create([
+        'code' => 'coupon',
+        'title' => 'Coupon (test-coupon)',
+        'value' => 10,
+    ]);
+
+    event('payregister.paypalexpress.extendFields', [new \stdClass(), &$fields, $order, []]);
+
+    expect($fields['purchase_units'][0]['amount']['breakdown']['discount'])->toHaveCount(2)
+        ->and($fields['purchase_units'][0]['amount']['breakdown']['discount']['value'])->toBe('10.00');
 });
 
 it('logs coupon history after order save', function() {

@@ -2,6 +2,8 @@
 
 namespace Igniter\Cart\Tests\Models;
 
+use Igniter\Cart\Models\Category;
+use Igniter\Cart\Models\Menu;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Coupons\Models\CouponHistory;
 use Igniter\Coupons\Models\Scopes\CouponScope;
@@ -10,6 +12,7 @@ use Igniter\Local\Models\Location;
 use Igniter\System\Models\Concerns\Switchable;
 use Igniter\User\Models\Customer;
 use Igniter\User\Models\CustomerGroup;
+use Illuminate\Support\Facades\Event;
 
 it('gets recurring every attribute correctly', function() {
     $coupon = Coupon::factory()->create([
@@ -25,6 +28,12 @@ it('sets recurring every attribute correctly', function() {
     ]);
 
     expect($coupon->getAttributes()['recurring_every'])->toBe('0, 1, 2, 3, 4, 5, 6');
+});
+
+it('returns enabled coupons in dropdown format', function() {
+    $coupon = Coupon::factory()->create(['status' => 1]);
+
+    expect(Coupon::getDropdownOptions())->toContain($coupon->name);
 });
 
 it('gets type name attribute correctly', function() {
@@ -43,6 +52,26 @@ it('gets formatted discount attribute correctly', function() {
 
     $coupon = Coupon::factory()->create(['type' => 'F', 'discount' => 10]);
     expect($coupon->formatted_discount)->toBe('10.00');
+});
+
+it('syncs menu categories when coupon exists', function() {
+    $coupon = Coupon::factory()->create();
+    $categories = Category::factory(3)->create();
+    $categoryIds = $categories->pluck('category_id')->all();
+
+    $coupon->addMenuCategories($categoryIds);
+
+    expect($coupon->categories->pluck('category_id')->all())->toBe($categoryIds);
+});
+
+it('syncs menus when coupon exists', function() {
+    $coupon = Coupon::factory()->create();
+    $menus = Menu::factory(3)->create();
+    $menuIds = $menus->pluck('menu_id')->all();
+
+    $coupon->addMenus($menuIds);
+
+    expect($coupon->menus->pluck('menu_id')->all())->toBe($menuIds);
 });
 
 it('checks if coupon is fixed', function() {
@@ -80,9 +109,17 @@ it('checks if coupon is valid', function($attributes) {
         'recurring_from_time' => '00:00:00',
         'recurring_to_time' => '23:59:59',
     ],
+    fn() => [
+        'validity' => 'recurring',
+        'recurring_every' => [0, 1, 2, 3, 4, 5, 6],
+        'recurring_from_time' => now()->subHours(3)->toTimeString(),
+        'recurring_to_time' => now()->subHours(6)->toTimeString(),
+    ],
 ]);
 
 it('checks if coupon is expired', function($attributes) {
+    $this->travelTo(now()->setDay(3));
+
     $coupon = Coupon::factory()->create($attributes);
 
     expect($coupon->isExpired())->toBeTrue();
@@ -92,6 +129,12 @@ it('checks if coupon is expired', function($attributes) {
         'fixed_date' => now()->subDay(),
         'fixed_from_time' => now()->subHours(3)->toTimeString(),
         'fixed_to_time' => now()->subHour()->toTimeString(),
+    ],
+    fn() => [
+        'validity' => 'fixed',
+        'fixed_date' => now()->subDay(),
+        'fixed_from_time' => now()->subHours(3)->toTimeString(),
+        'fixed_to_time' => now()->subHours(6)->toTimeString(),
     ],
     fn() => [
         'validity' => 'period',
@@ -104,7 +147,31 @@ it('checks if coupon is expired', function($attributes) {
         'recurring_from_time' => now()->subHours(3)->toTimeString(),
         'recurring_to_time' => now()->subHour()->toTimeString(),
     ],
+    fn() => [
+        'validity' => 'recurring',
+        'recurring_every' => [0, 1, 5, 6],
+        'recurring_from_time' => now()->subHours(3)->toTimeString(),
+        'recurring_to_time' => now()->subHour()->toTimeString(),
+    ],
 ]);
+
+it('checks if coupon is expired with custom validity', function() {
+    $dateTime = now()->subDay();
+    $coupon = Coupon::factory()->create(['validity' => 'custom']);
+
+    Event::listen('igniter.coupon.isExpired', function($coupon, $orderDateTime) use ($dateTime) {
+        return $orderDateTime->eq($dateTime);
+    });
+
+    expect($coupon->isExpired($dateTime))->toBeTrue();
+});
+
+it('checks if coupon is valid with no matched validity', function() {
+    $dateTime = now()->subDay();
+    $coupon = Coupon::factory()->create(['validity' => 'custom']);
+
+    expect($coupon->isExpired($dateTime))->toBeFalse();
+});
 
 it('checks if coupon has restriction', function() {
     $coupon = Coupon::factory()->create(['order_restriction' => ['delivery']]);
@@ -148,6 +215,31 @@ it('checks if customer group can redeem', function() {
     $coupon->customer_groups()->attach($group);
 
     expect($coupon->customerGroupCanRedeem($group))->toBeTrue();
+});
+
+it('returns true when coupon applies on whole cart', function() {
+    $coupon = Coupon::factory()->create();
+    $coupon->apply_coupon_on = 'whole_cart';
+
+    expect($coupon->appliesOnWholeCart())->toBeTrue();
+});
+
+it('returns true when coupon applies on menu items', function() {
+    $coupon = Coupon::factory()->create();
+    $coupon->apply_coupon_on = 'menu_items';
+
+    expect($coupon->appliesOnMenuItems())->toBeTrue();
+});
+
+it('returns true when coupon applies on delivery', function() {
+    $coupon = Coupon::factory()->create();
+    $coupon->apply_coupon_on = 'delivery_fee';
+
+    expect($coupon->appliesOnDelivery())->toBeTrue();
+});
+
+it('returns coupon when code and location match', function() {
+    expect(Coupon::getByCodeAndLocation('invalid-code', 1))->toBeNull();
 });
 
 it('applies filters on the query builder', function() {

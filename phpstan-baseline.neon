@@ -87,7 +87,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: src/CartConditions/Coupon.php
 
 		-
@@ -247,7 +247,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:categories\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: src/Models/Coupon.php
 
 		-
@@ -262,7 +262,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:menus\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: src/Models/Coupon.php
 
 		-
@@ -344,6 +344,21 @@ parameters:
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 1
 			path: src/Models/CouponHistory.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:categories\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Observers/CouponObserver.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:menus\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Observers/CouponObserver.php
+
+		-
+			message: "#^Call to an undefined method Igniter\\\\Cart\\\\Models\\\\Order\\:\\:coupon_history\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Observers/OrderObserver.php
 
 		-
 			message: "#^Call to an undefined method Igniter\\\\Flame\\\\Database\\\\Builder\\:\\:whereHasOrDoesntHaveLocation\\(\\)\\.$#"

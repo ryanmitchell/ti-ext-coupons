@@ -13,11 +13,9 @@ class RedeemsCoupon extends ModelAction
      */
     public function redeemCoupon()
     {
-        if (!$this->model->getOrderTotals()->keyBy('code')->get('coupon')) {
-            return;
+        if ($this->model->getOrderTotals()->keyBy('code')->get('coupon')) {
+            CouponHistory::redeem($this->model->order_id);
         }
-
-        CouponHistory::redeem($this->model->order_id);
     }
 
     /**

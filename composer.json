@@ -15,15 +15,15 @@
     "discounts"
   ],
   "require": {
-    "tastyigniter/core": "^v4.0@beta",
-    "tastyigniter/ti-ext-api": "^v4.0@beta",
-    "tastyigniter/ti-ext-cart": "^v4.0@beta"
+    "tastyigniter/core": "^v4.0@beta || ^v4.0@dev",
+    "tastyigniter/ti-ext-api": "^v4.0@beta || ^v4.0@dev",
+    "tastyigniter/ti-ext-cart": "^v4.0@beta || ^v4.0@dev"
   },
   "require-dev": {
     "laravel/pint": "^1.2",
     "larastan/larastan": "^2.4.0",
     "sampoyigi/testbench": "dev-main as 1.0",
-    "pestphp/pest-plugin-laravel": "^2.0"
+    "pestphp/pest-plugin-laravel": "^3.0"
   },
   "autoload": {
     "psr-4": {

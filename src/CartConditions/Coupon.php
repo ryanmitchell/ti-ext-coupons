@@ -46,7 +46,7 @@ class Coupon extends CartCondition
         }
 
         if (is_null(self::$couponModel) || (self::$couponModel && strtolower(self::$couponModel->code) !== strtolower($couponCode))) {
-            self::$couponModel = CouponModel::getByCodeAndLocation($couponCode, Location::getId());
+            self::$couponModel = CouponModel::getByCode($couponCode);
         }
 
         return self::$couponModel;
@@ -124,7 +124,7 @@ class Coupon extends CartCondition
 
             flash()->warning(sprintf(
                 lang('igniter.cart::default.alert_coupon_not_applied'),
-                currency_format($minimumOrder)
+                currency_format($minimumOrder),
             ))->now();
         }
 
@@ -180,7 +180,7 @@ class Coupon extends CartCondition
 
         if ($couponModel->hasRestriction($orderType)) {
             throw new ApplicationException(sprintf(
-                lang('igniter.cart::default.alert_coupon_order_restriction'), $orderType
+                lang('igniter.cart::default.alert_coupon_order_restriction'), $orderType,
             ));
         }
 
@@ -191,7 +191,7 @@ class Coupon extends CartCondition
         if (Cart::subtotal() < $couponModel->minimumOrderTotal()) {
             throw new ApplicationException(sprintf(
                 lang('igniter.cart::default.alert_coupon_not_applied'),
-                currency_format($couponModel->minimumOrderTotal())
+                currency_format($couponModel->minimumOrderTotal()),
             ));
         }
 
@@ -231,10 +231,15 @@ class Coupon extends CartCondition
         return $applicableItems->contains($cartItem->id);
     }
 
-    public function __destruct()
+    public static function clearInternalCache(): void
     {
         self::$couponModel = null;
         self::$applicableItems = null;
         self::$hasErrors = false;
+    }
+
+    public function __destruct()
+    {
+        static::clearInternalCache();
     }
 }

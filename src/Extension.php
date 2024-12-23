@@ -7,6 +7,8 @@ use Igniter\Cart\Models\Order;
 use Igniter\Coupons\Models\Actions\RedeemsCoupon;
 use Igniter\Coupons\Models\Coupon;
 use Igniter\Coupons\Models\CouponHistory;
+use Igniter\Coupons\Models\Observers\CouponObserver;
+use Igniter\Coupons\Models\Observers\OrderObserver;
 use Igniter\Coupons\Models\Scopes\CouponScope;
 use Igniter\Local\Facades\Location;
 use Igniter\System\Classes\BaseExtension;
@@ -16,6 +18,11 @@ use Illuminate\Support\Facades\Event;
 
 class Extension extends BaseExtension
 {
+    protected $observers = [
+        Coupon::class => CouponObserver::class,
+        Order::class => OrderObserver::class,
+    ];
+
     protected array $scopes = [
         Coupon::class => CouponScope::class,
     ];
@@ -23,7 +30,7 @@ class Extension extends BaseExtension
     public function boot()
     {
         Order::extend(function($model) {
-            $model->relation['hasMany']['coupon_history'] = [\Igniter\Coupons\Models\CouponHistory::class, 'delete' => true];
+            $model->relation['hasMany']['coupon_history'] = [\Igniter\Coupons\Models\CouponHistory::class];
             $model->implement[] = RedeemsCoupon::class;
         });
 
@@ -33,11 +40,9 @@ class Extension extends BaseExtension
                 ->whereHasOrDoesntHaveLocation(Location::getId())
                 ->each(function($coupon) {
                     $orderDateTime = Location::orderDateTime();
-                    if ($coupon->isExpired($orderDateTime)) {
-                        return;
+                    if (!$coupon->isExpired($orderDateTime)) {
+                        resolve(CartManager::class)->applyCouponCondition($coupon->code);
                     }
-
-                    resolve(CartManager::class)->applyCouponCondition($coupon->code);
                 });
         });
 

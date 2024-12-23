@@ -116,12 +116,6 @@ class Coupon extends Model
     // Events
     //
 
-    protected function beforeDelete()
-    {
-        $this->categories()->detach();
-        $this->menus()->detach();
-    }
-
     /**
      * Create new or update existing menu categories
      *
@@ -131,10 +125,6 @@ class Coupon extends Model
      */
     public function addMenuCategories(array $categoryIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->categories()->sync($categoryIds);
     }
 
@@ -147,10 +137,6 @@ class Coupon extends Model
      */
     public function addMenus(array $menuIds = [])
     {
-        if (!$this->exists) {
-            return false;
-        }
-
         $this->menus()->sync($menuIds);
     }
 

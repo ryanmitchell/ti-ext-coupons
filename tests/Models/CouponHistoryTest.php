@@ -9,6 +9,27 @@ use Igniter\Flame\Database\Factories\HasFactory;
 use Igniter\System\Models\Concerns\Switchable;
 use Igniter\User\Models\Concerns\HasCustomer;
 use Igniter\User\Models\Customer;
+use Illuminate\Support\Facades\Event;
+
+it('redeem returns false when coupon history is not found', function() {
+    expect(CouponHistory::redeem(123))->toBeFalse();
+});
+
+it('redeems coupon history successfully', function() {
+    $order = Order::factory()->create();
+    $coupon = Coupon::factory()->create(['code' => 'TESTCODE']);
+    $couponHistory = CouponHistory::factory()->create([
+        'order_id' => $order->getKey(),
+        'coupon_id' => $coupon->getKey(),
+        'code' => $coupon->code,
+        'amount' => 10.0,
+        'min_total' => 0.0,
+    ]);
+
+    CouponHistory::redeem($order->order_id);
+
+    expect($couponHistory->fresh()->status)->toBeTrue();
+});
 
 it('gets customer name attribute correctly', function() {
     $customer = Customer::factory()->create(['first_name' => 'Jane', 'last_name' => 'Doe']);
@@ -60,6 +81,23 @@ it('creates coupon history correctly', function() {
 it('does not create coupon history if coupon does not exist', function() {
     $order = Order::factory()->create();
     $couponTotal = (object)['code' => 'TESTCODE', 'title' => '[TESTCODE] Test Coupon', 'value' => 10];
+
+    $couponHistory = CouponHistory::createHistory($couponTotal, $order);
+
+    expect($couponHistory)->toBeFalse();
+});
+
+it('does not create coupon history if beforeAddHistory event fails', function() {
+    $order = Order::factory()->create();
+    $expectedCoupon = Coupon::factory()->create(['code' => 'TESTCODE']);
+    $couponTotal = (object)[
+        'code' => 'TESTCODE',
+        'title' => '[TESTCODE] Test Coupon',
+        'value' => 10.0,
+    ];
+    Event::listen('couponHistory.beforeAddHistory', function($couponHistory, $couponTotal, $customer, $coupon) use ($expectedCoupon) {
+        return $expectedCoupon->getKey() !== $coupon->getKey();
+    });
 
     $couponHistory = CouponHistory::createHistory($couponTotal, $order);
 

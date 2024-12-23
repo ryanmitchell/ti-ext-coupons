@@ -8,6 +8,12 @@ use Igniter\Coupons\Models\Coupon as CouponModel;
 use Igniter\Coupons\Models\CouponHistory;
 use Illuminate\Support\Facades\Event;
 
+it('redeems coupon returns null when no coupon order total', function() {
+    $order = Order::factory()->create();
+
+    expect((new RedeemsCoupon($order))->redeemCoupon())->toBeNull();
+});
+
 it('redeems coupon correctly', function() {
     Event::fake();
 
@@ -18,7 +24,6 @@ it('redeems coupon correctly', function() {
         'value' => 10,
         'priority' => 1,
     ]);
-
     $couponHistory = CouponHistory::create([
         'order_id' => $order->order_id,
         'coupon_id' => 1,
