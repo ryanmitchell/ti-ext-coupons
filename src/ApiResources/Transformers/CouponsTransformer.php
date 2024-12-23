@@ -4,11 +4,14 @@ namespace Igniter\Coupons\ApiResources\Transformers;
 
 use Igniter\Api\ApiResources\Transformers\CategoryTransformer;
 use Igniter\Api\ApiResources\Transformers\MenuTransformer;
+use Igniter\Api\Traits\MergesIdAttribute;
 use Igniter\Coupons\Models\Coupon;
 use League\Fractal\TransformerAbstract;
 
 class CouponsTransformer extends TransformerAbstract
 {
+    use MergesIdAttribute;
+
     protected array $availableIncludes = [
         'menus',
         'categories',
@@ -17,7 +20,7 @@ class CouponsTransformer extends TransformerAbstract
 
     public function transform(Coupon $coupon)
     {
-        return $coupon->toArray();
+        return $this->mergesIdAttribute($coupon);
     }
 
     public function includeCategories(Coupon $coupon)
@@ -25,7 +28,7 @@ class CouponsTransformer extends TransformerAbstract
         return $this->collection(
             $coupon->categories,
             new CategoryTransformer,
-            'categories'
+            'categories',
         );
     }
 
@@ -34,7 +37,7 @@ class CouponsTransformer extends TransformerAbstract
         return $this->collection(
             $coupon->menus,
             new MenuTransformer,
-            'menus'
+            'menus',
         );
     }
 
@@ -43,7 +46,7 @@ class CouponsTransformer extends TransformerAbstract
         return $this->collection(
             $coupon->history,
             new CouponHistoryTransformer,
-            'history'
+            'history',
         );
     }
 }
