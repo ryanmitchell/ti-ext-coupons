@@ -31,11 +31,6 @@ parameters:
 			path: src/ApiResources/Transformers/CouponsTransformer.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$code\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
 			message: "#^Access to an undefined property Illuminate\\\\Support\\\\Optional\\:\\:\\$discount\\.$#"
 			count: 2
 			path: src/CartConditions/Coupon.php
@@ -66,47 +61,7 @@ parameters:
 			path: src/CartConditions/Coupon.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:content\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Facades\\\\Cart\\:\\:subtotal\\(\\)\\.$#"
-			count: 2
-			path: src/CartConditions/Coupon.php
-
-		-
 			message: "#^Call to an undefined static method Igniter\\\\Cart\\\\Models\\\\Menu\\:\\:whereHasCategory\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:coveredArea\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderDateTime\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderType\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderTypeIsDelivery\\(\\)\\.$#"
-			count: 1
-			path: src/CartConditions/Coupon.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\User\\\\Facades\\\\Auth\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: src/CartConditions/Coupon.php
 
@@ -126,21 +81,6 @@ parameters:
 			path: src/Extension.php
 
 		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:getId\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Local\\\\Facades\\\\Location\\:\\:orderDateTime\\(\\)\\.$#"
-			count: 1
-			path: src/Extension.php
-
-		-
-			message: "#^Call to an undefined static method Igniter\\\\Admin\\\\Facades\\\\AdminMenu\\:\\:setContext\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/Coupons.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Cart\\\\Models\\\\Order\\:\\:\\$model\\.$#"
 			count: 1
 			path: src/Models/Actions/RedeemsCoupon.php
@@ -156,17 +96,7 @@ parameters:
 			path: src/Models/Actions/RedeemsCoupon.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$apply_coupon_on\\.$#"
-			count: 3
-			path: src/Models/Coupon.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$customer_groups\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$customer_redemptions\\.$#"
 			count: 1
 			path: src/Models/Coupon.php
 
@@ -176,72 +106,7 @@ parameters:
 			path: src/Models/Coupon.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$discount\\.$#"
-			count: 3
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$fixed_date\\.$#"
-			count: 2
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$fixed_from_time\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$fixed_to_time\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$locations\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$min_total\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$period_end_date\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$period_start_date\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$recurring_every\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$recurring_from_time\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$recurring_to_time\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$redemptions\\.$#"
-			count: 1
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$type\\.$#"
-			count: 3
-			path: src/Models/Coupon.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\Coupon\\:\\:\\$validity\\.$#"
 			count: 1
 			path: src/Models/Coupon.php
 
@@ -286,42 +151,7 @@ parameters:
 			path: src/Models/CouponHistory.php
 
 		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$amount\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$code\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$coupon_id\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
 			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$customer\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$customer_id\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$min_total\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$order_id\\.$#"
-			count: 1
-			path: src/Models/CouponHistory.php
-
-		-
-			message: "#^Access to an undefined property Igniter\\\\Coupons\\\\Models\\\\CouponHistory\\:\\:\\$status\\.$#"
 			count: 1
 			path: src/Models/CouponHistory.php
 

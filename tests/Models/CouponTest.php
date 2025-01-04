@@ -118,7 +118,7 @@ it('checks if coupon is valid', function($attributes) {
 ]);
 
 it('checks if coupon is expired', function($attributes) {
-    $this->travelTo(now()->weekday(3));
+    $this->travelTo(now()->setHour(12)->weekday(3));
 
     $coupon = Coupon::factory()->create($attributes);
 

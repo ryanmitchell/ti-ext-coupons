@@ -9,6 +9,19 @@ use Igniter\User\Models\Concerns\HasCustomer;
 
 /**
  * Coupons History Model Class
+ *
+ * @property int $coupon_history_id
+ * @property int $coupon_id
+ * @property int|null $order_id
+ * @property int|null $customer_id
+ * @property string $code
+ * @property float|null $min_total
+ * @property float|null $amount
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property bool $status
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read mixed $customer_name
+ * @mixin \Igniter\Flame\Database\Model
  */
 class CouponHistory extends Model
 {

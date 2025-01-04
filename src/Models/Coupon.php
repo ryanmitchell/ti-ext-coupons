@@ -12,6 +12,34 @@ use Igniter\User\Models\CustomerGroup;
 
 /**
  * Coupons Model Class
+ *
+ * @property int $coupon_id
+ * @property string $name
+ * @property string $code
+ * @property string $type
+ * @property float|null $discount
+ * @property float|null $min_total
+ * @property int $redemptions
+ * @property int $customer_redemptions
+ * @property string|null $description
+ * @property bool|null $status
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property string|null $validity
+ * @property \Illuminate\Support\Carbon|null $fixed_date
+ * @property mixed|null $fixed_from_time
+ * @property mixed|null $fixed_to_time
+ * @property \Illuminate\Support\Carbon|null $period_start_date
+ * @property \Illuminate\Support\Carbon|null $period_end_date
+ * @property string|null $recurring_every
+ * @property mixed|null $recurring_from_time
+ * @property mixed|null $recurring_to_time
+ * @property array|null $order_restriction
+ * @property string $apply_coupon_on
+ * @property bool $auto_apply
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read mixed $formatted_discount
+ * @property-read mixed $type_name
+ * @mixin \Igniter\Flame\Database\Model
  */
 class Coupon extends Model
 {
